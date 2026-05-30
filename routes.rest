@@ -17,12 +17,12 @@ POST http://localhost:5000/api/users
 Content-Type: application/json
 
 {
-    "firstName": "John",
+    "firstName": "Harriet",
     "lastName": "Smith",
-    "email": "john.smith@gmail.com",
-    "age": 30,
-    "phone": "0712345678",
-    "address": "123 Main St",
+    "email": "harriet.smith@gmail.com",
+    "age": 34,
+    "phone": "0765740875",
+    "address": "128 Warrick St",
     "createdAt": "2026-05-30"
 }
 
