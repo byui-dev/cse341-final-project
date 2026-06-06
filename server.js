@@ -3,7 +3,8 @@ const connectDB = require('./db/connect');
 const cors = require('cors');
 const session = require('express-session');
 const passport = require('passport');
-const errorHandler = require('./middleware/errorHandler');
+// Centralized error handling middleware
+const errorHandler = require('./middleware/errorWithAsync');
 
 require('dotenv').config();
 
@@ -48,10 +49,10 @@ const authRoutes = require('./routes/authRoutes');
 app.use('/auth', authRoutes);
 
 // Routes
-const userRoutes = require('./userRoutes');
-const itemRoutes = require('./itemRoutes');
+const userRoutes = require('./routes/userRoutes');
+const itemRoutes = require('./routes/itemRoutes');
 
-console.log(typeof userRoutes); // Debugging line to check the type of userRoutes
+console.log(`Routes mountes successfully. User routes type: ${typeof userRoutes}`); // Debugging line to check the type of userRoutes
 
 app.use('/api/users', userRoutes);
 app.use('/api/items', itemRoutes);
@@ -73,7 +74,8 @@ const start = async () => {
     try {
         await connectDB();
         app.listen(port, () => {
-            console.log(`Server is running in ${process.env.NODE_ENV} || development mode on port ${port}`);
+            const mode = process.env.NODE_ENV || 'development';
+            console.log(`Server is running in ${mode} || mode on port ${port}`);
         });
     } catch (err) {
         console.error('Database connection falied:', err);
