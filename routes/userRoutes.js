@@ -10,9 +10,8 @@ const {
 } = require("../controllers/userController");
 
 // Import authentication guard and validation helpers
-
 const { requireAuth } = require("../middleware/auth");
-const { validateRequest} = require("../middleware/validate");
+const { validateRequest } = require("../middleware/validate");
 
 /**
  * @openapi
@@ -32,22 +31,22 @@ const { validateRequest} = require("../middleware/validate");
  *     security:
  *       - cookieAuth: []
  *     requestBody:
- *       required: true 
+ *       required: true
  *       content:
  *         application/json:
  *           schema:
- *              $ref: '#/components/schemas/UserBody' 
+ *             $ref: '#/components/schemas/UserBody'
  *     responses:
  *       201:
  *         description: User created successfully
  *       400:
  *         description: Bad request - validation failed
- *       401: 
+ *       401:
  *         description: Unauthorized - authentication required
  *       500:
  *         description: Internal server error
  */
-router.route("/").get(getUsers).post(validateRequest, createUser);
+router.route("/").get(getUsers).post(validateRequest("userBody"), createUser);
 
 /**
  * @openapi
@@ -66,9 +65,9 @@ router.route("/").get(getUsers).post(validateRequest, createUser);
  *     responses:
  *       200:
  *         description: Successfully retrieved user record
- *       400: 
+ *       400:
  *         description: Invalid ID format provided in parameters
- *        404:
+ *       404:
  *         description: User not found with the provided ID
  *
  *   put:
@@ -89,7 +88,7 @@ router.route("/").get(getUsers).post(validateRequest, createUser);
  *       content:
  *         application/json:
  *           schema:
- *              $ref: '#/components/schemas/UserUpdateBody'
+ *             $ref: '#/components/schemas/UserUpdateBody'
  *     responses:
  *       200:
  *         description: User updated successfully
@@ -101,6 +100,7 @@ router.route("/").get(getUsers).post(validateRequest, createUser);
  *         description: User not found with the provided ID
  *       500:
  *         description: Internal server error
+ *
  *   delete:
  *     summary: Delete user
  *     description: Delete a user profile completely by their ID
@@ -123,14 +123,11 @@ router.route("/").get(getUsers).post(validateRequest, createUser);
  *         description: Unauthorized - authentication required
  *       404:
  *         description: User not found with the provided ID
- *       
- *  
- *         
  */
 router
   .route("/:id")
-  .get(validateRequest('paramsId', 'params'), getUser)
-  .put(requireAuth, validateRequest('paramsId', 'params'), updateUser)
-  .delete(requireAuth, validateRequest('paramsId', 'params'), deleteUser);
+  .get(validateRequest("paramsId", "params"), getUser)
+  .put(requireAuth, validateRequest("paramsId", "params"), updateUser)
+  .delete(requireAuth, validateRequest("paramsId", "params"), deleteUser);
 
 module.exports = router;

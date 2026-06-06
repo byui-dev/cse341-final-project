@@ -4,7 +4,7 @@ const cors = require('cors');
 const session = require('express-session');
 const passport = require('passport');
 // Centralized error handling middleware
-const errorHandler = require('./middleware/errorWithAsync');
+const { errorHandler } = require('./middleware/errorWithAsync');
 
 require('dotenv').config();
 

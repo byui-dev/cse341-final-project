@@ -1,6 +1,14 @@
+const catchAsync = (fn) => {
+  return (req, res, next) => {
+    fn(req, res, next).catch(next);
+  };
+};
+
 // Central Global Error Processing
 const errorHandler = (err, req, res, next) => {
-  const statusCode = res.statusCode !== 200 ? 500 : res.statusCode;  
+  const statusCode =
+    res.statusCode && res.statusCode !== 200 ? res.statusCode : 500;
+
 
   res.status(statusCode).json({
     message: err.message,
@@ -8,4 +16,7 @@ const errorHandler = (err, req, res, next) => {
   });
 };
 
-module.exports = errorHandler;  
+module.exports = {
+  catchAsync,
+  errorHandler
+};  
