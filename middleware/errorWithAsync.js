@@ -5,21 +5,25 @@ const catchAsync = (fn) => {
   };
 };
 
-// Central Global Error Processing (With automatic parameter correction fallback)
+// Standard Central Global Error Processing
 const errorHandler = (err, req, res, next) => {
-  // Safe Fallback: If parameters are shifted by Express, locate the genuine response object
-  let realRes = res;
-  if (req && typeof req.status === "function") realRes = req;
-  if (err && typeof err.status === "function") realRes = err;
-
-  // Determine the correct status code safely
+  // Check if res exists and has a status function before using it
   const statusCode =
-    realRes.statusCode && realRes.statusCode !== 200 ? realRes.statusCode : 500;
+    res && res.status
+      ? res.statusCode && res.statusCode !== 200
+        ? res.statusCode
+        : 500
+      : 500;
 
-  return realRes.status(statusCode).json({
-    message: err.message || "An internal server error occurred",
-    stack: process.env.NODE_ENV === "production" ? "🥞" : err.stack,
-  });
+  if (res && typeof res.status === "function") {
+    return res.status(statusCode).json({
+      message: err.message || "Internal Server Error",
+      stack: process.env.NODE_ENV === "production" ? "🥞" : err.stack,
+    });
+  }
+
+  // Terminal fallback log if Express lifecycle isn't completely initialized
+  console.error("Global Error Caught:", err);
 };
 
 module.exports = {
