@@ -11,7 +11,7 @@ const schemas = {
     age: Joi.number().integer().min(0).required(),
     phone: Joi.string().optional().allow(''),
     address: Joi.string().optional().allow(''),
-    createdAt: Joi.any().strip
+    createdAt: Joi.any().strip()
   }),
 
   // Rule for creating/updating an item
