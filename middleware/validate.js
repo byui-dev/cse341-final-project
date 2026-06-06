@@ -8,6 +8,10 @@ const schemas = {
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
     email: Joi.string().email().required(),
+    age: Joi.number().integer().min(0).required(),
+    phone: Joi.string().optional().allow(''),
+    address: Joi.string().optional().allow(''),
+    createdAt: Joi.any().strip
   }),
 
   // Rule for creating/updating an item
@@ -16,6 +20,11 @@ const schemas = {
     description: Joi.string().required(),
     price: Joi.number().positive().required(),
     quantity: Joi.number().integer().min(0).required(),
+    category: Joi.string().required(),
+    stock: Joi.number().integer().min(0).required(),
+    brand: Joi.string().optional().allow(''),
+    rating: Joi.number().min(0).max(5).optional(),
+    createdAt: Joi.any().strip()
   }),
 
   // Rule to ensure request parameter IDs are valid 24-character hex strings
