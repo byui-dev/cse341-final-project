@@ -1,19 +1,32 @@
+@baseUrl = http://localhost:5000
 @userId = 6a1866e261ae3beb101974b4
 @itemId = 6a18687661ae3beb101974c1
 
 
-### ======================
-### USERS
-### ======================
+### ===================================
+### DEMONSRATION & AUTH TESTING FLOW
+### ===================================
+
+### 1. Public Entry / Trigger Authentication Redirect
+# Send http://localhost:/5000/auth/google in a browser to log in
+# Once loggeed in, the browser receives a 'connect.sid' cookie with the session ID
+# For testing protected endpoints below in VS Code, ensure your client handles cookies (e.g. Postman, Insomnia) and include the 'connect.sid' cookie in requests
+
+### 2. Mock Logout
+GET {{baseUrl}}/auth/logout
+
+### ===================================
+### USERS ENDPOINTS
+### ===================================
 
 ### Get all users
-GET http://localhost:5000/api/users
-Content-Type: application/json
+GET {{baseUrl}}/api/users
+
 
 ###
 
-### Create a new user
-POST http://localhost:5000/api/users
+### Create a new user (VALID DATA = Requires Auth)
+POST {{baseUrl}}/api/users
 Content-Type: application/json
 
 {
@@ -26,16 +39,29 @@ Content-Type: application/json
     "createdAt": "2026-05-30"
 }
 
-###
-
-### Get a user by ID
-GET http://localhost:5000/api/users/{{userId}}
+### Create a new user (INVALID DATA - Demonstration of 400 Validation error)
+POST {{baseUrl}}/api/users
 Content-Type: application/json
 
+{
+    "firstName": "Harriet",
+    "lastName": "Smith",
+    "email": "invalid-email-format",
+    "age": -5,
+    "phone": "0765-ABCD-75",
+    "address": "128 Warrick Street",
+    "createdAt": "Not-A-Date"
+}
+
+
+### Get a user by valid ID (Public Read)
+GET http://{{baseUrl}}/api/users/{{userId}}
+
+
 ###
 
-### Update a user by ID
-PUT http://localhost:5000/api/users/{{userId}}
+### Update a user by ID (VALID DATA)
+PUT http://{{baseUrl}}/api/users/{{userId}}
 Content-Type: application/json
 
 {
@@ -51,22 +77,22 @@ Content-Type: application/json
 ###
 
 ### Delete a user by ID
-DELETE http://localhost:5000/api/users/{{userId}}
-Content-Type: application/json
+DELETE http://{{baseUrl}}/api/users/{{userId}}
 
 
-### ======================
-### ITEMS
-### ======================
 
-### Get all items
-GET http://localhost:5000/api/items
-Content-Type: application/json
+### ==========================================
+### ITEMS ENDPOINTS
+### ==========================================
+
+### Get all items (Public Read)
+GET http://{{baseUrl}}/api/items
+
 
 ###
 
-### Create a new item
-POST http://localhost:5000/api/items
+### Create a new item (VALID DATA - Matching Joi and required stock)
+POST http://{{baseUrl}}/api/items
 Content-Type: application/json
 
 {
@@ -80,14 +106,27 @@ Content-Type: application/json
 
 ###
 
-### Get an item by ID
-GET http://localhost:5000/api/items/{{itemId}}
+### Create a new item (INVALID DATA - Demonstration of 400 Validation error)
+POST http://{{baseUrl}}/api/items
+Content-Type: application/json
+
+{
+    "name": "Smartphone",
+    "category": "Electronics",
+    "price": -100,
+    "stock": -50,
+    "brand": "Samsung",
+    "rating": 6
+}
+
+### Get an item by valid ID (Public Read)
+GET http://{{baseUrl}}/api/items/{{itemId}}
 Content-Type: application/json
 
 ###
 
 ### Update an item by ID
-PUT http://localhost:5000/api/items/{{itemId}}
+PUT http://{{baseUrl}}/api/items/{{itemId}}
 Content-Type: application/json
 
 {
@@ -102,6 +141,6 @@ Content-Type: application/json
 ###
 
 ### Delete an item by ID
-DELETE http://localhost:5000/api/items/{{itemId}}
-Content-Type: application/json
+DELETE http://{{baseUrl}}/api/items/{{itemId}}
+
 ``
